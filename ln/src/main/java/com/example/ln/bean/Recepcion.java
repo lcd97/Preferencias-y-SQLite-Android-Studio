@@ -213,13 +213,16 @@ public class Recepcion implements Serializable {
     public void savePreferences(SharedPreferences preferences){
         SharedPreferences.Editor editor = preferences.edit();
 
-        //editor.putString(ID, String.valueOf(Id));
+        //Lo guardamos como entero
+        editor.putInt(ID, Id);
         editor.putString(NOMFUNCIONARIO, NomFuncionario);
         editor.putString(NOMVISITANTE, NomVisitante);
         editor.putString(CEDULAVISITANTE, CedulaVisitante);
         editor.putString(MOTIVOVISITA, MotivoVisita);
         editor.putString(DOCUMENTO, Documento);
-        //editor.putString(FECHA, String.valueOf(Fecha.getTime()));
+
+        //Lo guardamos como LONG
+        editor.putLong(FECHA, Fecha.getTime());
 
         editor.apply();
     }
@@ -228,12 +231,14 @@ public class Recepcion implements Serializable {
     public static Recepcion getPreferences(SharedPreferences preferences) {
         Recepcion recepcion = new Recepcion();
 
-        //recepcion.setId(Integer.parseInt(preferences.getString(ID,null)));
+        //LO RECUPERAMOS COMO ENTERO
+        recepcion.setId(preferences.getInt(ID, 0));
         recepcion.setNomFuncionario(preferences.getString(NOMFUNCIONARIO,null));
         recepcion.setNomVisitante(preferences.getString(NOMVISITANTE,null));
         recepcion.setCedulaVisitante(preferences.getString(CEDULAVISITANTE,null));
         recepcion.setMotivoVisita(preferences.getString(MOTIVOVISITA,null));
-        //recepcion.setFecha(preferences.getLong(FECHA));
+        //LO RECUPERAMOS COMO FECHA
+        recepcion.setFecha(new Date(preferences.getLong(FECHA, new Date().getTime())));
         recepcion.setDocumento(preferences.getString(DOCUMENTO,null));
 
         return recepcion;

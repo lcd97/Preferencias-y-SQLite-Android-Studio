@@ -74,13 +74,14 @@ public class MainActivity extends AppCompatActivity {
         Recepcion recep = Recepcion.getPreferences(preferencia);
 
         //ASIGNACION DE CAMPOS CON LA ULTIMA PREFERENCIA ALMACENADA
-            //Identificador.setText(String.valueOf(recep.getId()));
+            Identificador.setText(String.valueOf(recep.getId()));
             NomFuncionario.setText(recep.getNomFuncionario());
             NomVisitante.setText(recep.getNomVisitante());
             CedulaVisitante.setText(recep.getCedulaVisitante());
             MotivoVisita.setText(recep.getMotivoVisita());
             Documento.setText(recep.getDocumento());
-            //fechaObj.setDate(recepcion.getFecha().getTime());
+            fechaObj.setDate(recep.getFecha().getTime());
+            mfecha = recep.getFecha();
 
         //EVENTO GUARDAR
         btnAgregar.setOnClickListener(new View.OnClickListener() {
@@ -112,17 +113,22 @@ public class MainActivity extends AppCompatActivity {
                         Documento.setText("");
                         fechaObj.setDate(new Date().getTime());
 
-                    /*ALMACENAR PREFERENCIAS*/
+                        // SOLO NECESITABAS LLAMAR A TU METODO CON LA MISMA INSTANCIA
+                        recepcion.savePreferences(preferencia);
+
+                        //ESTE CODIGO ES INNECESARIO, CON LA MISMA INSTACIA QUE GUARDAS EN SQLite,
+                        // CON ESA MISMA INSTANCIA GUARDAS LAS PREFERENCIAS
+                    /*ALMACENAR PREFERENCIAS
                     Recepcion rec = new Recepcion();
-                    //rec.setId(Integer.parseInt(Identificador.getText().toString()));
+                    rec.setId(Integer.parseInt(Identificador.getText().toString()));
                     rec.setNomFuncionario(NomFuncionario.getText().toString());
                     rec.setNomVisitante(NomVisitante.getText().toString());
                     rec.setCedulaVisitante(CedulaVisitante.getText().toString());
                     rec.setMotivoVisita(MotivoVisita.getText().toString());
                     rec.setDocumento(Documento.getText().toString());
-                    //rec.setFecha(mfecha);
+                    rec.setFecha(mfecha);
                         //GUARDAR LAS PREFERENCIAS
-                        rec.savePreferences(preferencia);
+                        rec.savePreferences(preferencia);*/
 
                         Toast.makeText(MainActivity.this, "Almacenado", Toast.LENGTH_SHORT).show();
                     } else
@@ -152,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
                     MotivoVisita.setText(String.valueOf(recepcion.getMotivoVisita()));
                     Documento.setText(String.valueOf(recepcion.getDocumento()));
                     fechaObj.setDate(recepcion.getFecha().getTime());
+                    mfecha = recepcion.getFecha();
                 } else
                     Toast.makeText(MainActivity.this, "No existe Cedula", Toast.LENGTH_SHORT).show();
 
@@ -175,6 +182,11 @@ public class MainActivity extends AppCompatActivity {
                 //SI SE MODIFICO LA RECEPCION
                 if(recepcion.modificar(MainActivity.this, CedulaVisitante.getText().toString()))
                 {
+                    //GUARDAS EL ID EN TU INSTACIA
+                    recepcion.setId(Integer.parseInt(Identificador.getText().toString()));
+                    //SOBREESCRIBES LA PREFERENCIA Y SE GUARDA EL CAMBIO
+                    recepcion.savePreferences(preferencia);
+
                     //LIMPIAR LOS CAMPOS
                     Identificador.setText("");
                     NomFuncionario.setText("");
@@ -183,6 +195,7 @@ public class MainActivity extends AppCompatActivity {
                     MotivoVisita.setText("");
                     Documento.setText("");
                     fechaObj.setDate(new Date().getTime());
+                    mfecha = new Date();
 
                     //ACTIVACION Y DESACTIVACION DE OBJETOS
                     btnModificar.setEnabled(false);
