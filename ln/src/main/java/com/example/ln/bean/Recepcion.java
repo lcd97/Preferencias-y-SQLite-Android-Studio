@@ -17,6 +17,7 @@ public class Recepcion implements Serializable {
     private String MotivoVisita;
     private Date Fecha;
     private String Documento;
+    //private String variableNoSirve
 
     //VARIABLE DE PREFERENCIAS
     public static final String ID = "id";
